@@ -1,0 +1,31 @@
+extract obj_props
+
+gs = import gamescene
+
+bird = ?g
+screen = ?g
+
+MAX_FALLING_SPEED = 7
+CLICK_SPEED = 15
+
+speed = counter(0, bits = $.ceil($.log([MAX_FALLING_SPEED,CLICK_SPEED].max(),2)))
+
+$.add(obj{
+    OBJ_ID: 1,
+    X: 90,
+    Y: 180,
+    GROUPS: [bird,screen],
+})
+
+while_loop(() => true, (){
+    if speed > -MAX_FALLING_SPEED {
+        speed--
+    }
+    bird.move(0,speed.to_const(-MAX_FALLING_SPEED..CLICK_SPEED))
+})
+
+on(gs.button_a(), !{
+    speed = CLICK_SPEED
+})
+
+screen.lock_to_player(lock_x = true, lock_y = false)
